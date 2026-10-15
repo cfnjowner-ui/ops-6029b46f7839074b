@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>CF NJ Ops Board</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header id="hdr">
+  <div class="brand"><span class="logo">CF</span><div><h1>NJ Operations / Production / Install Board</h1><div class="sub" id="sub">Loading…</div></div></div>
+  <div class="ctl">
+    <span id="stale" class="badge hidden"></span>
+    <button id="btnTv" title="TV / wall mode">TV mode</button>
+    <button id="btnRef" title="Refresh now">↻</button>
+  </div>
+</header>
+<main id="main"></main>
+<div id="tvbar" class="hidden"><div id="tvprog"></div></div>
+<div id="tvdots" class="hidden"></div>
+<div id="lock" class="overlay hidden">
+  <form id="lockform"><h2>Access code</h2><p>Enter the shared access code to view the board.</p>
+  <input id="code" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="access code">
+  <button type="submit">Unlock</button><div id="lockerr" class="err"></div></form>
+</div>
+<script src="app.js"></script>
+</body></html>
