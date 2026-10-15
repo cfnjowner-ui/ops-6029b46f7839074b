@@ -84,3 +84,18 @@ body.tv .attgrid{columns:2}
 body.tv td .note{display:none}body.tv td{padding:.25vw .4vw}body.tv .bar{height:5px}
 @media (max-width:600px){.hm{display:none}.panel{overflow-x:auto}}
 tr.lst td{padding:2px 6px;border-top:0}tr.lst summary{cursor:pointer;font-size:.8em;color:var(--acc)}tr.lst .scroll{max-height:160px;overflow:auto;margin-top:4px}
+
+.mhead{display:flex;flex-wrap:wrap;gap:6px 28px;align-items:flex-end;margin-bottom:8px}
+.mhead .lab{font-size:.8rem;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+.mbig{font-size:3rem;font-weight:800;line-height:1;color:var(--red);font-variant-numeric:tabular-nums}
+.mbar{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:6px 0 10px;background:var(--line)}
+.mbar i{display:flex;align-items:center;justify-content:center;min-width:2px;overflow:hidden}
+.mbar i span{color:#fff;font-size:.8rem;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:baseline}
+.mt tr.old td{opacity:.85}.mo{display:none}
+body.tv .mbig{font-size:5rem}body.tv .mbar{height:3.2vw}body.tv .mbar i span{font-size:1.3rem}
+body.tv .mt td .note{display:block}body.tv .mt td .note.mo{display:none}
+@media (max-width:600px){.mbig{font-size:2.3rem}.mo{display:block}.mt .hm{display:none}.mt td .note:not(.mo){display:none}.mt td .note.hm{display:none}}
+body.tv .mt td .note.rule{display:none}body.tv .mt td{padding:.18vw .4vw}body.tv .mt td b{font-size:1.05em}
+body.tv .mbig{font-size:4.2rem}body.tv .mbar{height:2.4vw;margin:.3vw 0 .5vw}body.tv .mhead{margin-bottom:.2vw}
+body.tv .mt td .note.hm{display:none}body.tv .mt td{padding:.12vw .4vw}body.tv .mt{font-size:1.05rem}body.tv .mbig{font-size:3.6rem}
