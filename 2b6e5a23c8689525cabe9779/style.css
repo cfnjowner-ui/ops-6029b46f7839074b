@@ -109,7 +109,7 @@ body.tv .mt td .note.hm{display:none}body.tv .mt td{padding:.12vw .4vw}body.tv .
 .pl-leg{font-size:.78rem;margin-top:6px;font-weight:700}.lg{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 2px 0 4px;vertical-align:baseline}
 .pl-wrap{overflow-x:auto;max-height:520px;overflow-y:auto}
 .pl-grid{min-width:880px}
-.pl-row{display:grid;grid-template-columns:170px 190px repeat(6,minmax(70px,1fr));align-items:center;border-left:5px solid var(--ok);border-bottom:1px solid var(--line);padding:3px 0}
+.pl-row{display:grid;grid-template-columns:170px 190px repeat(7,minmax(70px,1fr));align-items:center;border-left:5px solid var(--ok);border-bottom:1px solid var(--line);padding:3px 0}
 .pl-row.LRED{border-left-color:var(--red);background:rgba(217,58,58,.06)}.pl-row.LAMBER{border-left-color:var(--amb);background:rgba(224,161,0,.05)}
 .pl-head{border-left-color:transparent;position:sticky;top:0;background:var(--card);z-index:2;font-size:.68rem;text-transform:uppercase;color:var(--mut);font-weight:700;text-align:center;line-height:1.15}
 .pl-head small{text-transform:none;font-weight:600}
@@ -124,7 +124,7 @@ body.tv .mt td .note.hm{display:none}body.tv .mt td{padding:.12vw .4vw}body.tv .
 .pl-dot.cur.RED{background:var(--red);box-shadow:0 0 0 3px rgba(217,58,58,.35)}.pl-dot.cur.GREEN{background:var(--ok);box-shadow:0 0 0 3px rgba(31,157,99,.35)}
 .pl-inst b{font-size:.9rem}.pl-inst small{font-size:.72rem}
 body.tv .pl-grid{min-width:0}body.tv .pl-wrap{overflow:hidden;max-height:none}
-body.tv .pl-row{grid-template-columns:15% 20% repeat(6,1fr);padding:.2vw 0}
+body.tv .pl-row{grid-template-columns:14% 19% repeat(7,1fr);padding:.2vw 0}
 body.tv .pl-job,body.tv .pl-meta{font-size:1.02rem}body.tv .pl-head{font-size:.8rem}
 body.tv .pl-dot{width:1.7vw;height:1.7vw;font-size:.85rem}body.tv .pl-dot.cur{width:2vw;height:2vw}body.tv .pl-c small{font-size:.8rem}
 body.tv .pl-sn{font-size:2.2rem}body.tv .pl-sl{font-size:.85rem}body.tv .pl-leg{font-size:1rem}
