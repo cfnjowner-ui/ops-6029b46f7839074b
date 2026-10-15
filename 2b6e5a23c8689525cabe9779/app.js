@@ -93,6 +93,25 @@ P.blockers=function(tv){var b=D.blockers,lim=tv?11:99,h='<div class="note" style
  b.slice(0,lim).forEach(function(x){h+='<tr><td><span class="jn'+(x.crit?' crit':'')+'">'+esc(nm(x.j))+'</span></td><td>'+x.st+'</td><td>'+fd(x.inst)+'</td><td>'+x.dti+'d</td><td class="'+x.seg+'">'+x.seg+'</td><td>'+money(x.v)+'</td></tr>'});
  h+='</table>'+(b.length>lim?'<div class="note">+'+(b.length-lim)+' more</div>':'')+'</div><div class="note">Proxy: no PO/vendor data in ClosetWare. Red = ≤7d out and still design/spec/ordered, ≤3d out in prod queue, or ≤1d out in production.</div>';
  return {t:'Parts-not-ready blockers',h:h}};
+P.pipeline=function(tv){var Pp=D.pipeline;if(!Pp||!Pp.jobs.length)return {t:'Parts pipeline – where each at-risk job is',h:'<p class="note">no jobs in the window</p>',cls:'wide'};
+ var jobs=Pp.jobs,lim=tv?(Pp.tv_jobs||12):jobs.length,SHORT=['Design / Spec','Spec checked','Purchased / Ordered','Cut list done<br><small>prod. queue</small>','In production<br><small>saw·edge·bore·drawers</small>','Parts ready','Install date'],
+ LC={RED:'RED',AMBER:'AMBER',GREEN:'GREEN'},c=Pp.counts;
+ var h='<div class="pl-sum">'+Pp.summary.map(function(s,i){var t=s.n||0;return '<div class="pl-sc"><div class="pl-sn">'+t+'</div><div class="pl-sl">'+SHORT[i].split('<br>')[0]+'</div><div class="pl-sb">'+(t?'<i class="R" style="flex:'+s.red+'"></i><i class="A" style="flex:'+s.amber+'"></i><i class="G" style="flex:'+s.green+'"></i>':'')+'</div></div>'}).join('')
+  +'<div class="pl-sc pl-tot"><div class="pl-sn">'+jobs.length+'</div><div class="pl-sl">jobs ≤'+Pp.window_days+'d out</div><div class="pl-leg"><span class="lg R"></span>'+c.red+' <span class="lg A"></span>'+c.amber+' <span class="lg G"></span>'+c.green+'</div></div></div>';
+ h+='<div class="note" style="margin:2px 0 6px">At-risk jobs by <b>current stage</b> (bar = red / amber / green). Rows sorted by install date, soonest first.'+(tv&&jobs.length>lim?' Top '+lim+' of '+jobs.length+'.':'')+'</div>';
+ h+='<div class="pl-wrap"><div class="pl-grid"><div class="pl-row pl-head"><div class="pl-job">Order # – last name</div><div class="pl-meta">Install · seg · $</div>'+SHORT.map(function(x){return '<div class="pl-c">'+x+'</div>'}).join('')+'</div>';
+ jobs.slice(0,lim).forEach(function(p){var cells='';
+  p.steps.forEach(function(st,i){var cls,mark='',tip=SHORT[i].replace(/<[^>]*>/g,' ');
+   if(i===6){cells+='<div class="pl-c pl-inst"><b>'+fd(p.inst)+'</b><small>'+p.dti+'d</small></div>';return}
+   if(st.done){cls='done';mark='✓'}else if(i===p.cur){cls='cur';mark=(st.part?(st.n+'/4'):'●')}else cls='todo';
+   tip+=': '+(st.done?('done'+(st.d?' '+st.d:'')):(i===p.cur?'CURRENT'+(st.part?' ('+st.n+' of 4 stations)':'')+(st.d&&st.part?' started '+st.d:''):'not done'));
+   cells+='<div class="pl-c" title="'+esc(tip)+'" tabindex="0"><span class="pl-dot '+cls+' '+p.lvl+'">'+mark+'</span><small>'+(st.done&&st.d?fd(st.d):(i===p.cur&&st.part&&st.d?fd(st.d):'&nbsp;'))+'</small></div>'});
+  var why=p.lvl==='RED'?'RED: projected parts-ready '+fd(p.proj)+' is '+(-p.margin)+'d after needed-by date':p.lvl==='AMBER'?'AMBER: only '+p.margin+'d of slack':'GREEN: '+p.margin+'d of slack';
+  h+='<div class="pl-row L'+p.lvl+'" title="'+esc(why+' · est. '+p.rem+'d of work left')+'"><div class="pl-job"><span class="jn '+(p.lvl==='RED'?'crit':'')+'">'+esc(nm(p.j))+'</span></div><div class="pl-meta"><b>'+fd(p.inst)+'</b> · '+p.dti+'d · <span class="'+p.seg+'">'+(p.seg==='retail'?'retail':'core')+'</span> · '+money(p.v)+'</div>'+cells+'</div>'});
+ h+='</div></div>';
+ var L=Pp.lags;
+ h+='<div class="note">✓ done (hover/tap for milestone date, small text under marker) · ◉ current step · empty = not done (a later step can be filled if an earlier one was skipped/unrecorded). <b>Rule:</b> projected parts-ready = today + remaining median lags (sale→spec '+L.sale_to_spec+'d, spec→purchase '+L.spec_to_purch+'d, purchase→cut list '+L.purch_to_cutlist+'d, cut list→saw '+L.cutlist_to_saw+'d, saw→all stations '+L.prod_to_ready+'d, minus time already elapsed). Needed-by = install − '+Pp.ready_buffer+'d. <span class="pill RED">RED</span> projected after needed-by · <span class="pill">AMBER</span> slack &lt; '+Pp.amber_margin+'d · <span class="pill ok">GREEN</span> otherwise. Proxy only – no PO/vendor data.</div>';
+ return {t:'🧭 Parts pipeline – where each at-risk job is <span class="note">'+c.red+' red · '+c.amber+' amber · '+c.green+' green</span>',h:h,cls:'wide'}};
 P.today=function(tv){var s=D.stages.filter(function(x){return x.key==='S5'})[0]||{list:[],total:{n:0}},pd=D.not_closed;
  var h='<div class="note" style="margin:0 0 6px">Installing today ('+s.list.length+')</div><div class="scroll">'+chips(s.list,function(x){return {extra:''}})+'</div>';
  h+='<h3>Past install date – not closed ('+pd.length+')</h3><div class="scroll">'+pd.slice(0,tv?40:99).map(function(x){return '<span class="jn'+(x.days>30?' crit':'')+'">'+esc(nm(x.j))+' · '+fd(x.inst)+' ('+x.days+'d ago)</span>'}).join('')+'</div>';
@@ -120,7 +139,7 @@ P.trends=function(tv){var W=D.weeks,items=W.map(function(w){return {label:fd(w.w
  return {t:'Trends – last 8 weeks',h:h}};
 P.foot=function(){var m=D.meta;return {t:'Definitions & footnotes',cls:'wide',h:'<ul class="foot"><li><b>Money due:</b> WorkOrder.Balance_Due__c (= Order.Balance_Due__c = contract amount − total paid), counted once per Order so job + service work orders never double count. Collections = Order.In_Collections__c (Go To Collections date set) or completed job aged ≥ '+(D.money?D.money.collections_aged_days:'?')+' days with balance due (config COLLECTIONS_AGED_DAYS).</li><li><b>Population:</b> NJ JobTrac work orders, not canceled, not completed (no DT_JobCompleted / installer report), sold within '+m.cutoff_days+' days. Older open jobs ('+m.stale_open_jobs+', '+money(m.stale_open_dollars)+') are legacy/never-closed and excluded.</li><li><b>Stages</b> (first match): no install date = Sold-unscheduled; install today = Installing today; install date past = Not closed; else Parts ready (job-ready date or all stations done) → In production (any saw/edge/bore/drawer date) → Production queue (cut list done) → Ordered (purchasing checkpoint) → Spec checked → Design/Spec. "Ordered" is a purchasing checkpoint, not a vendor PO receipt.</li><li><b>Core vs retail:</b> retail = Costco / Lowe\'s / Home Depot opportunity; everything else core (incl. designer).</li><li><b>Installed</b> = completed job dated by install date. <b>Secured $</b> = retail 100%, core '+Math.round(m.core_secured_pct*100)+'% of Total Job $.</li><li><b>Capacity</b> '+m.cap_per_day+' installs/day is an assumption (config), not a system value. Visits come from InstallTrac work orders (NJ parent jobs).</li><li><b>Service</b> = open ServiceTrac created ≤'+m.service_window_days+' days ago; age = days since created. Service $ not shown (field is parent job value).</li><li>Streaks count Mon–Fri workdays with ≥1 install (holidays not excluded) and consecutive completed weeks with installs ≥ prior week.</li></ul>'}};
 // ───── layout ─────
-var PAGES=[['money'],['accomp','attention'],['today','sched'],['stages'],['capacity','blockers'],['aging','service'],['trends','closeout']];
+var PAGES=[['money'],['accomp','attention'],['today','sched'],['stages'],['capacity','blockers'],['pipeline'],['aging','service'],['trends','closeout']];
 function panelHtml(id,tv){var p=P[id](tv);return '<section class="panel '+(p.cls||'')+'" id="p-'+id+'"><h2>'+p.t+'</h2>'+p.h+'</section>'}
 var tv=false;
 function render(){
@@ -129,7 +148,7 @@ function render(){
  stale();
  var main=$('main');
  if(tv){main.innerHTML=PAGES.map(function(pg,i){return '<div class="page'+(pg.length==1?' one':'')+(i===pageIdx?' active':'')+'">'+pg.map(function(id){return panelHtml(id,true)}).join('')+'</div>'}).join('');dots()}
- else main.innerHTML='<div class="page">'+['money','accomp','attention','today','sched','capacity','stages','blockers','aging','service','trends','closeout','foot'].map(function(id){return panelHtml(id,false)}).join('')+'</div>';
+ else main.innerHTML='<div class="page">'+['money','accomp','attention','blockers','pipeline','today','sched','capacity','stages','aging','service','trends','closeout','foot'].map(function(id){return panelHtml(id,false)}).join('')+'</div>';
 }
 function stale(){if(!D)return;var mins=(Date.now()/1000-D.meta.generated_epoch)/60,b=$('stale');b.classList.remove('hidden');
  if(mins>D.meta.stale_minutes){b.className='badge';b.textContent='⚠ STALE DATA – '+(mins>=120?Math.round(mins/60)+'h':Math.round(mins)+'m')+' old'}else{b.className='badge ok';b.textContent='● live · '+Math.round(mins)+'m ago'}}
