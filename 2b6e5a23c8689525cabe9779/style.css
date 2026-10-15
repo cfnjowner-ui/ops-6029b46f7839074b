@@ -83,3 +83,4 @@ body.tv svg text{font-size:12px}
 body.tv .attgrid{columns:2}
 body.tv td .note{display:none}body.tv td{padding:.25vw .4vw}body.tv .bar{height:5px}
 @media (max-width:600px){.hm{display:none}.panel{overflow-x:auto}}
+tr.lst td{padding:2px 6px;border-top:0}tr.lst summary{cursor:pointer;font-size:.8em;color:var(--acc)}tr.lst .scroll{max-height:160px;overflow:auto;margin-top:4px}
