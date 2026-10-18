@@ -93,12 +93,12 @@ P.blockers=function(tv){var b=D.blockers,lim=tv?11:99,h='<div class="note" style
  b.slice(0,lim).forEach(function(x){h+='<tr><td><span class="jn'+(x.crit?' crit':'')+'">'+esc(nm(x.j))+'</span></td><td>'+x.st+'</td><td>'+fd(x.inst)+'</td><td>'+x.dti+'d</td><td class="'+x.seg+'">'+x.seg+'</td><td>'+money(x.v)+'</td></tr>'});
  h+='</table>'+(b.length>lim?'<div class="note">+'+(b.length-lim)+' more</div>':'')+'</div><div class="note">Proxy: no PO/vendor data in ClosetWare. Red = ≤7d out and still design/spec/ordered, ≤3d out in prod queue, or ≤1d out in production.</div>';
  return {t:'Parts-not-ready blockers',h:h}};
-P.pipeline=function(tv){var Pp=D.pipeline;if(!Pp||!Pp.jobs.length)return {t:'Parts pipeline – where each at-risk job is',h:'<p class="note">no jobs in the window</p>',cls:'wide'};
- var jobs=Pp.jobs,lim=tv?(Pp.tv_jobs||12):jobs.length,SHORT=['Design / Spec','Spec checked','Purchased / Ordered','Cut list done<br><small>prod. queue</small>','In production<br><small>saw·edge·bore·drawers</small>','Parts ready','Install date'],
- LC={RED:'RED',AMBER:'AMBER',GREEN:'GREEN'},c=Pp.counts;
- var h='<div class="pl-sum">'+Pp.summary.map(function(s,i){var t=s.n||0;return '<div class="pl-sc"><div class="pl-sn">'+t+'</div><div class="pl-sl">'+SHORT[i].split('<br>')[0]+'</div><div class="pl-sb">'+(t?'<i class="R" style="flex:'+s.red+'"></i><i class="A" style="flex:'+s.amber+'"></i><i class="G" style="flex:'+s.green+'"></i>':'')+'</div></div>'}).join('')
+function pipeTable(Pp,jobs,summ,c,lim,tv,addon){if(!jobs.length)return '<p class="note">'+(addon?'No add-on jobs in the window.':'no jobs in the window')+'</p>';
+ var SHORT=['Design / Spec','Spec checked','Purchased / Ordered','Cut list done<br><small>prod. queue</small>','In production<br><small>saw·edge·bore·drawers</small>','Parts ready','Install date'],
+ LC={};
+ var h='<div class="pl-sum">'+summ.map(function(s,i){var t=s.n||0;return '<div class="pl-sc"><div class="pl-sn">'+t+'</div><div class="pl-sl">'+SHORT[i].split('<br>')[0]+'</div><div class="pl-sb">'+(t?'<i class="R" style="flex:'+s.red+'"></i><i class="A" style="flex:'+s.amber+'"></i><i class="G" style="flex:'+s.green+'"></i>':'')+'</div></div>'}).join('')
   +'<div class="pl-sc pl-tot"><div class="pl-sn">'+jobs.length+'</div><div class="pl-sl">jobs ≤'+Pp.window_days+'d out</div><div class="pl-leg"><span class="lg R"></span>'+c.red+' <span class="lg A"></span>'+c.amber+' <span class="lg G"></span>'+c.green+'</div></div></div>';
- h+='<div class="note" style="margin:2px 0 6px">At-risk jobs by <b>current stage</b> (bar = red / amber / green). Rows sorted by install date, soonest first.'+(tv&&jobs.length>lim?' Top '+lim+' of '+jobs.length+'.':'')+'</div>';
+ h+='<div class="note" style="margin:2px 0 6px">'+(addon?'Add-on jobs (extra shelf/add-on orders, lighter production) by <b>current stage</b>':'At-risk jobs by <b>current stage</b>')+' (bar = red / amber / green). Rows sorted by install date, soonest first.'+(tv&&jobs.length>lim?' Top '+lim+' of '+jobs.length+'.':'')+'</div>';
  h+='<div class="pl-wrap"><div class="pl-grid"><div class="pl-row pl-head"><div class="pl-job">Order # – last name</div><div class="pl-meta">Install · seg · $</div>'+SHORT.map(function(x){return '<div class="pl-c">'+x+'</div>'}).join('')+'</div>';
  jobs.slice(0,lim).forEach(function(p){var cells='';
   p.steps.forEach(function(st,i){var cls,mark='',tip=SHORT[i].replace(/<[^>]*>/g,' ');
@@ -109,8 +109,14 @@ P.pipeline=function(tv){var Pp=D.pipeline;if(!Pp||!Pp.jobs.length)return {t:'Par
   var why=p.lvl==='RED'?'RED: projected parts-ready '+fd(p.proj)+' is '+(-p.margin)+'d after needed-by date':p.lvl==='AMBER'?'AMBER: only '+p.margin+'d of slack':'GREEN: '+p.margin+'d of slack';
   h+='<div class="pl-row L'+p.lvl+'" title="'+esc(why+' · est. '+p.rem+'d of work left')+'"><div class="pl-job"><span class="jn '+(p.lvl==='RED'?'crit':'')+'">'+esc(nm(p.j))+'</span></div><div class="pl-meta"><b>'+fd(p.inst)+'</b> · '+p.dti+'d · <span class="'+p.seg+'">'+(p.seg==='retail'?'retail':'core')+'</span> · '+money(p.v)+'</div>'+cells+'</div>'});
  h+='</div></div>';
+ return h}
+P.pipeline=function(tv){var Pp=D.pipeline;if(!Pp||!(Pp.jobs.length||(Pp.addon_jobs||[]).length))return {t:'Parts pipeline – where each at-risk job is',h:'<p class="note">no jobs in the window</p>',cls:'wide'};
+ var c=Pp.counts,ac=Pp.addon_counts||{red:0,amber:0,green:0},aj=Pp.addon_jobs||[];
+ var h=pipeTable(Pp,Pp.jobs,Pp.summary,c,tv?(Pp.tv_jobs||12):Pp.jobs.length,tv,false);
  var L=Pp.lags;
  h+='<div class="note">✓ done (hover/tap for milestone date, small text under marker) · ◉ current step · empty = not done (a later step can be filled if an earlier one was skipped/unrecorded). <b>Rule:</b> projected parts-ready = today + remaining median lags (sale→spec '+L.sale_to_spec+'d, spec→purchase '+L.spec_to_purch+'d, purchase→cut list '+L.purch_to_cutlist+'d, cut list→saw '+L.cutlist_to_saw+'d, saw→all stations '+L.prod_to_ready+'d, minus time already elapsed). Needed-by = install − '+Pp.ready_buffer+'d. <span class="pill RED">RED</span> projected after needed-by · <span class="pill">AMBER</span> slack &lt; '+Pp.amber_margin+'d · <span class="pill ok">GREEN</span> otherwise. Proxy only – no PO/vendor data.</div>';
+
+ h+='<h2 class="pl-addon-h">➕ Add-on jobs – parts pipeline <span class="note">'+aj.length+' add-on'+(aj.length==1?'':'s')+' · '+ac.red+' red · '+ac.amber+' amber · '+ac.green+' green</span></h2>'+pipeTable(Pp,aj,Pp.addon_summary||[],ac,tv?(Pp.addon_tv_jobs||6):aj.length,tv,true)+'<div class="note">Add-ons = orders flagged <b>Add-On Order</b> (Order.AddOn__c) in ClosetWare; shown separately, same stages and risk rules, and excluded from the main at-risk table above.</div>';
  return {t:'🧭 Parts pipeline – where each at-risk job is <span class="note">'+c.red+' red · '+c.amber+' amber · '+c.green+' green</span>',h:h,cls:'wide'}};
 P.today=function(tv){var s=D.stages.filter(function(x){return x.key==='S5'})[0]||{list:[],total:{n:0}},pd=D.not_closed;
  var h='<div class="note" style="margin:0 0 6px">Installing today ('+s.list.length+')</div><div class="scroll">'+chips(s.list,function(x){return {extra:''}})+'</div>';

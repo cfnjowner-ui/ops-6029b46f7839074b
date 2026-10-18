@@ -137,3 +137,6 @@ body.tv #p-pipeline .pl-wrap+.note{display:none}
 body.tv .pl-dot{width:1.4vw;height:1.4vw;font-size:.7rem}body.tv .pl-dot.cur{width:1.6vw;height:1.6vw}body.tv .pl-c small{font-size:.7rem;line-height:1}
 body.tv .pl-job,body.tv .pl-meta{font-size:.95rem}body.tv .pl-sn{font-size:1.5rem}body.tv .pl-sb{margin-top:.1vw}
 @media (max-width:600px){.pl-job{background:var(--card)!important;box-shadow:2px 0 3px rgba(0,0,0,.08)}.pl-row.LRED .pl-job{background:#fbe9e9!important}.pl-row.LAMBER .pl-job{background:#fdf7e6!important}body.dark .pl-row.LRED .pl-job,body.dark .pl-row.LAMBER .pl-job{background:var(--card)!important}}
+
+.pl-addon-h{margin:14px 0 6px;font-size:1rem;border-top:2px dashed var(--line);padding-top:10px}
+body.tv .pl-addon-h{margin:.4vw 0 .1vw;padding-top:.3vw;font-size:1.05rem}
