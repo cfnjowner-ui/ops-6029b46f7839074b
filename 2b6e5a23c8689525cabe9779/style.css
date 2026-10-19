@@ -140,3 +140,22 @@ body.tv .pl-job,body.tv .pl-meta{font-size:.95rem}body.tv .pl-sn{font-size:1.5re
 
 .pl-addon-h{margin:14px 0 6px;font-size:1rem;border-top:2px dashed var(--line);padding-top:10px}
 body.tv .pl-addon-h{margin:.4vw 0 .1vw;padding-top:.3vw;font-size:1.05rem}
+
+/* installs volume vs secured */
+.stiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stile{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:rgba(14,124,134,.04)}
+.stile.avg{background:rgba(120,120,140,.06)}
+.stile .lab{font-weight:800;font-size:.95rem}.stile .lab .note{font-weight:600;margin:0}
+.smet{margin-top:6px;padding-top:5px;border-top:1px solid var(--line)}
+.smet .sl{font-size:.72rem;text-transform:uppercase;font-weight:800;color:var(--mut);letter-spacing:.02em}
+.smet .sb{font-size:1.6rem;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}.smet .sb small{font-size:.8rem;font-weight:600;color:var(--mut)}
+.smet.sec .sb{color:var(--ok)}
+.ss{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:.8rem}
+.sx{display:inline-flex;gap:4px;align-items:baseline}.sx i{font-style:normal;color:var(--mut)}.sx small{color:var(--mut)}
+.sx-core i{color:var(--core)}.sx-costco i,.sx-lowes i{color:var(--retail)}
+.sunc{margin-top:6px;font-size:.85rem}.sunc.has b{color:var(--amb)}
+.sflag{margin-top:4px;font-size:.75rem;color:var(--mut)}
+.sdef{font-size:.74rem}
+@media (max-width:900px){.stiles{grid-template-columns:1fr}}
+body.tv .smet .sb{font-size:2.3rem}body.tv .ss{font-size:1.05rem}body.tv .stile .lab{font-size:1.25rem}body.tv .smet .sl{font-size:.95rem}
+body.tv .sunc{font-size:1.1rem}body.tv .sflag{font-size:.9rem}body.tv .sdef{font-size:.85rem}
