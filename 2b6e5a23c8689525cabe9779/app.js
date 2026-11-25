@@ -87,7 +87,7 @@ P.secured=function(tv){var S=D.secured;if(!S)return {t:'Installs – volume vs $
   var gap=(g.total&&g.total.v!=null)?(g.total.v-w.secured.total):0;
   h+='<div class="sgap'+(pctg!=null&&pctg<100?' behind':(pctg!=null&&pctg>=100?' met':''))+'">secured vs goal: '+money$(w.secured.total)+' of '+money$(g.total.v)+(pctg!=null?' ('+pctg+'%)':'')+(pctg!=null&&pctg<100&&gap>1?' · gap '+money$(gap)+' behind':(pctg!=null&&pctg>100?' · '+money$(-gap)+' ahead of goal':''))+'</div>';
   if(w.goal_through_today&&w.partial){var gt=w.goal_through_today,p2=(gt.total&&gt.total.v>0)?Math.round(w.secured.total/gt.total.v*100):null;
-    h+='<div class="note sthru">planned through today: '+money$(gt.total.v)+' <small>('+cnt(gt.total.n)+' jobs)</small>'+(p2!=null?' · secured vs goal through today: '+money$(w.secured.total)+' of '+money$(gt.total.v)+' ('+p2+'%)':'')+'</div>'}
+    h+='<div class="note sthru">goal through today: '+money$(gt.total.v)+' <small>('+cnt(gt.total.n)+' jobs)</small>'+(p2!=null?' · secured vs goal through today: '+money$(w.secured.total)+' of '+money$(gt.total.v)+' ('+p2+'%)':'')+'</div>'}
   if(sl.n)h+='<div class="note">includes '+cnt(sl.n)+' slipped job'+(sl.n==1?'':'s')+' '+money(sl.v)+' still counted in this week\'s goal</div>';
   h+='</div>';
   h+='<div class="sunc'+(u.n?' has':'')+'">Installed, not fully confirmed: <b>'+cnt(u.n)+' job'+(u.n==1?'':'s')+' · '+money$(u.v)+'</b> <span class="note">(full value; '+(ps.n?'incl. '+cnt(ps.n)+' partially secured – only their D2/FP credit counts':'no secured credit')+')</span></div>';
