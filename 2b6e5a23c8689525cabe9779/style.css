@@ -150,6 +150,11 @@ body.tv .pl-addon-h{margin:.4vw 0 .1vw;padding-top:.3vw;font-size:1.05rem}
 .smet .sl{font-size:.72rem;text-transform:uppercase;font-weight:800;color:var(--mut);letter-spacing:.02em}
 .smet .sb{font-size:1.6rem;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}.smet .sb small{font-size:.8rem;font-weight:600;color:var(--mut)}
 .smet.sec .sb{color:var(--ok)}
+.smet.goal .sb{color:var(--acc)}
+.sgap{margin-top:3px;font-size:.85rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ok)}
+.sgap.behind{color:var(--amb)}
+.sgap.met{color:var(--ok)}
+.sthru{margin-top:2px}
 .ss{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:.8rem}
 .sx{display:inline-flex;gap:4px;align-items:baseline}.sx i{font-style:normal;color:var(--mut)}.sx small{color:var(--mut)}
 .sx-core i{color:var(--core)}.sx-costco i,.sx-lowes i{color:var(--retail)}
@@ -158,4 +163,4 @@ body.tv .pl-addon-h{margin:.4vw 0 .1vw;padding-top:.3vw;font-size:1.05rem}
 .sdef{font-size:.74rem}
 @media (max-width:900px){.stiles{grid-template-columns:1fr}}
 body.tv .smet .sb{font-size:2.3rem}body.tv .ss{font-size:1.05rem}body.tv .stile .lab{font-size:1.25rem}body.tv .smet .sl{font-size:.95rem}
-body.tv .sunc{font-size:1.1rem}body.tv .sflag{font-size:.9rem}body.tv .sdef{font-size:.85rem}
+body.tv .sunc{font-size:1.1rem}body.tv .sflag{font-size:.9rem}body.tv .sdef{font-size:.85rem}body.tv .sgap{font-size:1.1rem}
